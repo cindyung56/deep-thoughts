@@ -19,7 +19,8 @@ module.exports = {
   // get single user by id
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
-      .then(async (user) => {
+    .populate("thoughts friends") 
+    .then(async (user) => {
         !user
           ? res.status(400).json({ message: "No user with that ID" })
           : res.json({ user });
