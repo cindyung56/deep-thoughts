@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const { User, Reaction, Thought } = require('../models');
+const { User, Thought, Reaction } = require('../models');
 
 // get all users
 // get a single user by id (include populated thought and friend data)
@@ -25,6 +25,7 @@ module.exports = {
             return res.status(500).json(err);
         });
     },
+    // get single user by id
     getSingleUser(req, res){
         User.findOne({_id: req.params.userId})
         .then(async (user) => {

@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const { User, Reaction, Thought } = require('../models');
+const { User, Thought, Reaction } = require('../models');
 
 // get all thoughts
 // get a single thought by id
@@ -9,7 +9,20 @@ const { User, Reaction, Thought } = require('../models');
 // delete to remove a thought by its id
 
 module.exports = {
-
+    // Get all thoughts
+    getThoughts(req, res){
+        Thought.find()
+        .then(async (thoughts) => {
+            const thoughtObj = {
+                thoughts,
+            };
+            return res.json(thoughtObj);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(500).json(err);
+        });
+    },
 
 
 
