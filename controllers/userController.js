@@ -1,97 +1,76 @@
-const { ObjectId } = require('mongoose').Types;
-const { User, Thought, Reaction } = require('../models');
-
-// get all users
-// get a single user by id (include populated thought and friend data)
-// post a new user
-// put request to update user by id
-// delete request to update user by id
-
-// post to add new friend to user's friend list
-// delete to remove friend from user's friend list
+const { ObjectId } = require("mongoose").Types;
+const { User, Thought, Reaction } = require("../models");
 
 module.exports = {
-    // Get all users
-    getUsers(req, res){
-        User.find()
-        .then(async (users) => {
-            const userObj = {
-                users,
-            };
-            return res.json(userObj);
-        })
-        .catch((err) => {
-            console.log(err);
-            return res.status(500).json(err);
-        });
-    },
-    // get single user by id
-    getSingleUser(req, res){
-        User.findOne({_id: req.params.userId})
-        .then(async (user) => {
-            !user
-            ? res.status(400).json({message: "No user with that ID"})
-            : res.json({ user })
-        })
-        .catch((err) => {
-            console.log(err);
-            return res.status(500).json(err);
-        })
-    }
+  // Get all users
+  getUsers(req, res) {
+    User.find()
+      .then(async (users) => {
+        const userObj = {
+          users,
+        };
+        return res.json(userObj);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  },
+  // get single user by id
+  getSingleUser(req, res) {
+    User.findOne({ _id: req.params.userId })
+      .then(async (user) => {
+        !user
+          ? res.status(400).json({ message: "No user with that ID" })
+          : res.json({ user });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  },
+  // post a new user
+  createUser(req, res) {
+    User.create(req.body)
+      .then((user) => res.json(user))
+      .catch((err) => res.status(500).json(err));
+  },
+  // delete user by id
+  deleteUser(req, res) {
+    User.findOneAndRemove({ _id: req.params.userId })
+      .then(
+        (user) =>
+          !user
+            ? res.status(404).json({ message: "No such user exists" })
+            : res.status(200).json(user) //Thought.deleteMany({ _id: user.thoughts })
+      )
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  },
+  // update user by id
+  updateUser(req, res) {
+    User.findOneAndUpdate({ _id: req.params.userId }, req.body, { new: true })
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No such user exists" })
+          : res.status(200).json(user)
+      )
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  },
+  // post to add new friend to user's friend list
+  addFriend(){
 
+  },
+  // delete to remove friend from user's friend list
+  deleteFriend(){
 
-// Get a single student
-//   getSingleStudent(req, res) {
-//     Student.findOne({ _id: req.params.studentId })
-//       .select('-__v')
-//       .lean()
-//       .then(async (student) =>
-//         !student
-//           ? res.status(404).json({ message: 'No student with that ID' })
-//           : res.json({
-//               student,
-//               grade: await grade(req.params.studentId),
-//             })
-//       )
-//       .catch((err) => {
-//         console.log(err);
-//         return res.status(500).json(err);
-//       });
-//   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+  },
+};
 
 
 
@@ -103,7 +82,7 @@ module.exports = {
 // // TODO: Create an aggregate function to get the number of students overall
 // const headCount = async () =>
 //   Student.aggregate([
-//     {$count: "numberOfStudents"} 
+//     {$count: "numberOfStudents"}
 //   ]) // can also do .count('studentCount')
 //     .then((numberOfStudents) => numberOfStudents);
 
